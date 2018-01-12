@@ -1,0 +1,29 @@
+/*
+ | ITCSS STRUCTURE: naming convention _<layer>.<partial>.scss
+ */
+/*
+ | SETTINGS: base font size, colour palettes
+ */
+body {
+  font-family: "open sans", "Helvetica Neue", Helvetica, Arial, sans-serif; }
+
+/*
+ | TOOLS: mixins and functions
+ */
+/*
+ | GENERIC: CSS resets, normalize
+ */
+/*
+ | ELEMENTS: Base styling for unclassed HTML elements (h1, anchor, etc.)
+ */
+/*
+ | OBJECTS: NON cosmetic objects
+ */
+/*
+ | COMPONENTS
+ */
+/*
+ | TRUMPS: utility and helper classes, hacks and overrides
+ */
+
+/*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJzdHlsZXMuY3NzIiwic291cmNlUm9vdCI6IiJ9*/
