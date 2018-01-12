@@ -1,4 +1,4 @@
-# Onweb - Sisketeers
+# OnWeb - Sisketeers
 
 # React imports
 ⋅⋅* Firebase
