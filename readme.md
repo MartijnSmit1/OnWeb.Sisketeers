@@ -1,5 +1,5 @@
 # Onweb - Sisketeers
 
-# React imports
-⋅⋅* Firebase
-⋅⋅* React Router Dom
+### React imports
+* Firebase
+* React Router Dom
