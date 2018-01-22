@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
 import Main from './components/main/master';
 import Admin from './components/admin/master';
 
@@ -9,10 +9,10 @@ class App extends React.Component {
         return (
             <div className="app">
               <Router>
-                <div>
+                <Switch>
                   <Route path="/play" component={Main} />
                   <Route path="/admin" component={Admin} />
-                </div>
+                </Switch>
               </Router>
             </div>
         );

@@ -3,6 +3,8 @@ import { BrowserRouter as Router, Route } from 'react-router-dom';
 import firebase, { auth } from 'firebase';
 import Login from './login';
 import Dashboard from './dashboard';
+import Quizzen from './quizzen/master';
+import Quiz from './quiz/master';
 
 class Master extends React.Component {
 
@@ -12,11 +14,13 @@ class Master extends React.Component {
 
   render() {
     return (
-      <div className="container">
+      <div>
         <Router>
           <div>
             <Route path="/admin" component={Login} />
             <Route path="/admin/dashboard" component={Dashboard} />
+            <Route path="/admin/quizzen" component={Quizzen} />
+            <Route path="/admin/quizzen/:id" component={Quiz} />
           </div>
         </Router>
       </div>

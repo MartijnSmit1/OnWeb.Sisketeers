@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import firebase, { auth } from 'firebase';
 
@@ -47,6 +47,8 @@ class Login extends React.Component {
     const { email, password } = this.state;
     auth().signInWithEmailAndPassword(email, password).then(() => {
       this.setState({
+        email: '',
+        password: '',
         error: false,
         auth: true
       });

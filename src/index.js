@@ -1,7 +1,8 @@
 import React from 'react';
+import ReactDOM from 'react-dom';
+import './index.css';
 import App from './app';
-import { render } from 'react-dom';
-import '../sass/main.scss';
+import registerServiceWorker from './registerServiceWorker';
 import * as firebase from 'firebase';
 
 var config = {
@@ -15,4 +16,5 @@ var config = {
 
 firebase.initializeApp(config);
 
-render(<App />, document.querySelector('#root'));
+ReactDOM.render(<App />, document.getElementById('root'));
+registerServiceWorker();

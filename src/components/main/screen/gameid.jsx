@@ -1,4 +1,4 @@
-import React, {Component} from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import Error from '../error';
 import firebase from 'firebase';
@@ -28,13 +28,13 @@ class GameID extends React.Component {
   }
 
   handleSubmit(e) {
-    if(this.state.gameid != ''){
+    if(this.state.gameid !== ''){
       const rootRef = firebase.database().ref().child('gameid');
       const ref = rootRef.child(this.state.gameid);
       var self = this;
       ref.on('value', snap => {
-        if(snap.val() != null){
-          if(snap.val().status == true){
+        if(snap.val() !== null){
+          if(snap.val().status === true){
             self.setState({
               quizid: snap.val().quizid,
               geschiedenisid: snap.val().id,
@@ -54,38 +54,6 @@ class GameID extends React.Component {
             errorSubTitle: 'Controleer en probeer het opnieuw.'
           });
         }
-        // var succesID = false;
-        // var succesStatus = false;
-        // for (let i=0; i<snap.val().length; i++) {
-          // if(snap.val()[i].code == self.state.gameid){
-          //   succesID = true;
-          //   if(snap.val()[i].active.status == true){
-          //     self.setState({
-          //       quizid: Object.keys(snap.val())[i]
-          //     });
-          //     succesStatus = true;
-          //   }
-          // }
-        // }
-        // if(succesID == false){
-        //   self.setState({
-        //     errorStatus: true,
-        //     errorTitle: 'We hebben die Game PIN niet herkend.',
-        //     errorSubTitle: 'Controleer en probeer het opnieuw.'
-        //   });
-        // } else if(succesID == true){
-        //   if(succesStatus == false){
-        //     self.setState({
-        //       errorStatus: true,
-        //       errorTitle: 'Helaas is deze Game niet actief.',
-        //       errorSubTitle: 'Controleer en probeer het opnieuw.'
-        //     });
-        //   } else if(succesStatus == true){
-            // self.setState({
-            //   redirect: true
-            // });
-        //   }
-        // }
       });
     } else {
       this.setState({
@@ -98,7 +66,7 @@ class GameID extends React.Component {
   }
 
   render() {
-    if(this.state.redirect == true){
+    if(this.state.redirect === true){
       return (
         <Redirect push to={{
           pathname: "/play/" + this.state.gameid,

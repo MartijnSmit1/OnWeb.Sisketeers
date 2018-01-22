@@ -37,7 +37,7 @@ class Master extends React.Component {
   render() {
 
     return (
-      <div className="container">
+      <div>
         <Router>
           <div>
             <Route path="/play" component={GameID} />

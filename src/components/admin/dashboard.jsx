@@ -1,44 +1,88 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
-import firebase, { auth } from 'firebase';
+import Navbar from './main/navbar';
 
-class Login extends React.Component {
+class Dashboard extends React.Component {
 
   constructor(props){
     super(props);
-    this.state = {
-      auth: true,
-    };
   }
 
   componentDidMount(){
-    var self = this;
-    firebase.auth().onAuthStateChanged(function(user) {
-      if (user) {
-        self.setState({
-          auth: true
-        });
-      } else {
-        self.setState({
-          auth: false
-        });
-      }
-    });
   }
 
   render() {
-    if(this.state.auth == false){
-      return <Redirect to='/admin' />;
-    }
 
     return (
-      <div className="outer play_body">
-        <div className="inner max">
-          Dashboard
+      <div>
+        <Navbar />
+        <div className="ui container">
+          <div className="ui equal width grid statistics">
+            <div className="column">
+              <div className="ui segment">
+                <div className="statistic">
+                  <div className="value">
+                    0
+                  </div>
+                  <div className="label">
+                    Quizzen
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="column">
+              <div className="ui segment">
+                <div className="statistic">
+                  <div className="value">
+                    0
+                  </div>
+                  <div className="label">
+                    Spelers totaal
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="column">
+              <div className="ui segment">
+                <div className="statistic">
+                  <div className="value">
+                    0
+                  </div>
+                  <div className="label">
+                    Actieve games
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div className="column">
+              <div className="ui segment">
+                <div className="statistic">
+                  <div className="value">
+                    0
+                  </div>
+                  <div className="label">
+                    Totale antwoorden
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+          <div className="ui equal width grid">
+            <div className="six wide column">
+              <div className="ui segment">
+
+              </div>
+            </div>
+            <div className="column">
+              <div className="ui segment">
+
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     );
   }
 
 }
-export default Login;
+export default Dashboard;
