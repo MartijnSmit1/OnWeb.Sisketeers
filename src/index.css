@@ -52,3 +52,7 @@ form.large{
 .item img{
   height: 14px!important;
 }
+
+a{
+  color: black;
+}

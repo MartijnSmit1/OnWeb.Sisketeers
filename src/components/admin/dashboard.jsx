@@ -22,7 +22,7 @@ class Dashboard extends React.Component {
               <div className="ui segment">
                 <div className="statistic">
                   <div className="value">
-                    0
+                    -
                   </div>
                   <div className="label">
                     Quizzen
@@ -34,7 +34,7 @@ class Dashboard extends React.Component {
               <div className="ui segment">
                 <div className="statistic">
                   <div className="value">
-                    0
+                    -
                   </div>
                   <div className="label">
                     Spelers totaal
@@ -46,7 +46,7 @@ class Dashboard extends React.Component {
               <div className="ui segment">
                 <div className="statistic">
                   <div className="value">
-                    0
+                    -
                   </div>
                   <div className="label">
                     Actieve games
@@ -58,7 +58,7 @@ class Dashboard extends React.Component {
               <div className="ui segment">
                 <div className="statistic">
                   <div className="value">
-                    0
+                    -
                   </div>
                   <div className="label">
                     Totale antwoorden
@@ -67,7 +67,7 @@ class Dashboard extends React.Component {
               </div>
             </div>
           </div>
-          <div className="ui equal width grid">
+          {/* <div className="ui equal width grid">
             <div className="six wide column">
               <div className="ui segment">
 
@@ -78,7 +78,7 @@ class Dashboard extends React.Component {
 
               </div>
             </div>
-          </div>
+          </div> */}
         </div>
       </div>
     );

@@ -17,9 +17,9 @@ class Master extends React.Component {
       <div>
         <Router>
           <div>
-            <Route path="/admin" component={Login} />
-            <Route path="/admin/dashboard" component={Dashboard} />
-            <Route path="/admin/quizzen" component={Quizzen} />
+            <Route exact path="/admin" component={Login} />
+            <Route exact path="/admin/dashboard" component={Dashboard} />
+            <Route exact path="/admin/quizzen" component={Quizzen} />
             <Route path="/admin/quizzen/:id" component={Quiz} />
           </div>
         </Router>
