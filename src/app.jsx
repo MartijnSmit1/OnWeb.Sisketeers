@@ -7,30 +7,6 @@ import * as f from './functions';
 class App extends React.Component {
 
     render() {
-        var q =  {
-            "keuzes" : [ {
-                "goed" : true,
-                "text" : "A"
-            }, {
-                "goed" : false,
-                "text" : "B"
-            }, {
-                "goed" : false,
-                "text" : "C"
-            }, {
-                "goed" : false,
-                "text" : "D"
-            } ],
-            "score" : 10,
-            "time" : 60,
-            "type" : "meerkeuze",
-            "vraag" : "De vraag?"
-        }
-
-
-        console.log(f.test());
-        // f.createQuiz("Naam", "Beschrijving");
-        f.updateQuizQuestions(0, q);
         return (
             <div className="app">
               <Router>
