@@ -1,7 +1,8 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
-import { Button, Dropdown, Menu, Modal } from 'semantic-ui-react';
+import { Button, Dropdown, Menu, Modal, Input } from 'semantic-ui-react';
 import firebase, { auth } from 'firebase';
+import * as f from '../../../functions';
 
 class Navbar extends React.Component {
 
@@ -10,7 +11,9 @@ class Navbar extends React.Component {
     this.state = {
       naam: '',
       auth: true,
-      quizModalOpen: false
+      quizModalOpen: false,
+      descriptionValQuiz: '',
+      titleValQuiz: ''
     }
 
     this.logout = this.logout.bind(this);
@@ -51,8 +54,14 @@ class Navbar extends React.Component {
     });
   }
 
-  openQuizModal = () => this.setState({ quizModalOpen: true })
-  closeQuizModal = () => this.setState({ quizModalOpen: false })
+  openQuizModal = () => this.setState({ quizModalOpen: true });
+  closeQuizModal = () => this.setState({ quizModalOpen: false });
+
+  handleCreateQuiz = () => {
+      f.createQuiz(this.state.titleValQuiz, this.state.descriptionValQuiz, (id) => {
+          // return(<Redirect to={'/admin/quizzen/'+id} />);
+      });
+  }
 
   render() {
     if(this.state.auth == false){
@@ -96,6 +105,7 @@ class Navbar extends React.Component {
         >
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
+<<<<<<< HEAD
             <form className="ui form">
               <div className="field">
                 <label>Titel: </label>
@@ -106,10 +116,22 @@ class Navbar extends React.Component {
                 <input type="text" value={this.state.beschrijving} onChange={this.handleBeschrijvingChange}/>
               </div>
             </form>
+=======
+            <Modal.Description>
+                <p>Title: <p><Input
+                    onChange={e => {this.setState({titleValQuiz: e.target.value})}}
+                    placeholder='Title'
+                /></p></p>
+                <p>Description: <p><Input
+                    onChange={e => {this.setState({descriptionValQuiz: e.target.value})}}
+                    placeholder='Description'
+                /></p></p>
+            </Modal.Description>
+>>>>>>> eadd8a57a621fd30536a781c0dcfec772a81866a
           </Modal.Content>
           <Modal.Actions>
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.closeQuizModal}/>
-            <Button positive icon='checkmark' labelPosition='right' content='Aanmaken' />
+            <Button positive icon='checkmark' labelPosition='right' content='Aanmaken' onClick={this.handleCreateQuiz} />
           </Modal.Actions>
         </Modal>
       </div>
