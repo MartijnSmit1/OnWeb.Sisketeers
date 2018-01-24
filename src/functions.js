@@ -80,7 +80,8 @@ function createQuiz(titel, beschrijving, cb) {
 			"beschrijving" : beschrijving ? beschrijving : 'Beschrijving van de quiz',
 			"id" : ind,
 			"titel" : titel ? titel: 'Dit is de titel van de quiz',
-			"vragen" : []
+			"vragen" : [],
+			"uid" : uid
 		};
 
 		tref.update(pack, () => {cb(ind)});
