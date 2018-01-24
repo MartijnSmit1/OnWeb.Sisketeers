@@ -109,11 +109,11 @@ class Navbar extends React.Component {
             {/* <form className="ui form">
               <div className="field">
                 <label>Titel: </label>
-                <input type="text" value={this.state.titel} onChange={this.handleTitelChange}/>
+                <input type="text" />
               </div>
               <div className="field">
                 <label>Beschrijving: </label>
-                <input type="text" value={this.state.beschrijving} onChange={this.handleBeschrijvingChange}/>
+                <input type="text" />
               </div>
             </form> */}
 
