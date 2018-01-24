@@ -85,11 +85,11 @@ class Navbar extends React.Component {
           </Menu.Item>
           <NavLink to='/admin/dashboard' className="item" activeClassName="active">Dashboard</NavLink>
           <NavLink to='/admin/quizzen' className="item" activeClassName="active">Quizzen</NavLink>
-          {/* <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink> */}
+          <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink>
 
           <Menu.Menu position='right'>
             <Menu.Item>
-              <Button primary>Quiz starten</Button>
+              <Button primary>Game starten</Button>
             </Menu.Item>
             <Menu.Item>
               <Button positive onClick={this.openQuizModal}>Quiz aanmaken</Button>
@@ -102,8 +102,6 @@ class Navbar extends React.Component {
           </Menu.Menu>
         </Menu>
 
-        <br />
-
         <Modal
           size='small'
           closeIcon
@@ -115,18 +113,6 @@ class Navbar extends React.Component {
             </Dimmer>
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
-
-            {/* <form className="ui form">
-              <div className="field">
-                <label>Titel: </label>
-                <input type="text" />
-              </div>
-              <div className="field">
-                <label>Beschrijving: </label>
-                <input type="text" />
-              </div>
-            </form> */}
-
             <Modal.Description>
                 <p>Title: <p><Input
                     onChange={e => {this.setState({titleValQuiz: e.target.value})}}
