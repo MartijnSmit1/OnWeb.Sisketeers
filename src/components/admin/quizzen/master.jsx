@@ -27,6 +27,9 @@ class Quizzen extends React.Component {
   }
 
   renderQuizzen(currentQuiz, i){
+      if (currentQuiz.vragen == undefined) {
+          currentQuiz.vragen = {length: 0};
+      }
        return (
            <Quiztable
                key={i}
