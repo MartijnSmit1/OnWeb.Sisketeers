@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
-import { Button, Dropdown, Menu } from 'semantic-ui-react';
+import { Button, Dropdown, Menu, Modal } from 'semantic-ui-react';
 import firebase, { auth } from 'firebase';
 
 class Navbar extends React.Component {
@@ -9,7 +9,8 @@ class Navbar extends React.Component {
     super(props);
     this.state = {
       naam: '',
-      auth: true
+      auth: true,
+      quizModalOpen: false
     }
 
     this.logout = this.logout.bind(this);
@@ -50,6 +51,9 @@ class Navbar extends React.Component {
     });
   }
 
+  openQuizModal = () => this.setState({ quizModalOpen: true })
+  closeQuizModal = () => this.setState({ quizModalOpen: false })
+
   render() {
     if(this.state.auth == false){
       return <Redirect to='/admin' />;
@@ -58,28 +62,47 @@ class Navbar extends React.Component {
     const { activeItem } = this.state
 
     return (
-      <Menu size='tiny'>
-        <Menu.Item>
-          <img src='http://i63.tinypic.com/2db5aon.png' />
-        </Menu.Item>
-        <NavLink to='/admin/dashboard' className="item" activeClassName="active">Dashboard</NavLink>
-        <NavLink to='/admin/quizzen' className="item" activeClassName="active">Quizzen</NavLink>
-        <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink>
+      <div>
+        <Menu size='tiny'>
+          <Menu.Item>
+            <img src='http://i63.tinypic.com/2db5aon.png' />
+          </Menu.Item>
+          <NavLink to='/admin/dashboard' className="item" activeClassName="active">Dashboard</NavLink>
+          <NavLink to='/admin/quizzen' className="item" activeClassName="active">Quizzen</NavLink>
+          <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink>
 
-        <Menu.Menu position='right'>
-          <Menu.Item>
-            <Button primary>Game starten</Button>
-          </Menu.Item>
-          <Menu.Item>
-            <Button positive>Quiz aanmaken</Button>
-          </Menu.Item>
-          <Dropdown item text={this.state.naam}>
-            <Dropdown.Menu>
-              <a className="item" onClick={this.logout}>Logout</a>
-            </Dropdown.Menu>
-          </Dropdown>
-        </Menu.Menu>
-      </Menu>
+          <Menu.Menu position='right'>
+            <Menu.Item>
+              <Button primary>Game starten</Button>
+            </Menu.Item>
+            <Menu.Item>
+              <Button positive onClick={this.openQuizModal}>Quiz aanmaken</Button>
+            </Menu.Item>
+            <Dropdown item text={this.state.naam}>
+              <Dropdown.Menu>
+                <a className="item" onClick={this.logout}>Logout</a>
+              </Dropdown.Menu>
+            </Dropdown>
+          </Menu.Menu>
+        </Menu>
+
+        <Modal
+          size='small'
+          closeIcon
+          open={this.state.quizModalOpen}
+          onClose={this.closeQuizModal}
+        >
+          <Modal.Header>Quiz aanmaken</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.closeQuizModal}/>
+            <Button positive icon='checkmark' labelPosition='right' content='Aanmaken' />
+          </Modal.Actions>
+        </Modal>
+      </div>
     );
   }
 
