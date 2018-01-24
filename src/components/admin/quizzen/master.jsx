@@ -33,10 +33,7 @@ class Quizzen extends React.Component {
        return (
            <Quiztable
                key={i}
-               titel={currentQuiz.titel}
-               beschrijving={currentQuiz.beschrijving}
-               id={currentQuiz.id}
-               aantal={currentQuiz.vragen.length}
+               quiz={currentQuiz}
            />
        );
    }

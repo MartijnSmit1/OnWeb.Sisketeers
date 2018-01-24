@@ -6,10 +6,13 @@ class Quiztable extends React.Component {
 
   constructor(props){
     super(props);
+
+    // this.vragenCount = this.vragenCount.bind(this);
   }
 
   componentDidMount(){
   }
+
 
   render() {
 
@@ -17,15 +20,15 @@ class Quiztable extends React.Component {
       <div className="column">
         <div className="ui segment">
           <NavLink
-            to={{ pathname: "/admin/quizzen/" + this.props.id }}
+            to={{ pathname: "/admin/quizzen/" + this.props.quiz.id }}
           >
             <table>
               <thead>
                 <tr>
-                  <th colSpan="2"><h2>{this.props.titel}</h2></th>
+                  <th colSpan="2"><h2>{this.props.quiz.titel}</h2></th>
                 </tr>
                 <tr>
-                  <td colSpan="2">{this.props.beschrijving}</td>
+                  <td colSpan="2">{this.props.quiz.beschrijving}</td>
                 </tr>
               </thead>
               <tbody>
@@ -34,12 +37,12 @@ class Quiztable extends React.Component {
                 </tr>
                 <tr>
                   <th>Quiz ID: </th>
-                  <td>{this.props.id}</td>
+                  <td>{this.props.quiz.id}</td>
                 </tr>
-                <tr>
+                {/* <tr>
                   <th>Aantal vragen: </th>
-                  <td>{this.props.aantal}</td>
-                </tr>
+                  {this.vragenCount}
+                </tr> */}
               </tbody>
             </table>
           </NavLink>
