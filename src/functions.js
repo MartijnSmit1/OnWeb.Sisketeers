@@ -83,7 +83,8 @@ function createQuiz(titel, beschrijving, cb) {
 			"vragen" : []
 		};
 
-		tref.update(pack);
+		tref.update(pack, () => {cb(ind)});
+
 	});
 }
 
