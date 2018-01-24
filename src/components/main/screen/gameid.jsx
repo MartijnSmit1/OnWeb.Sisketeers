@@ -10,7 +10,7 @@ class GameID extends React.Component {
     this.state = {
       gameid: '',
       quizid: '',
-      geschiedenisid: '',
+      gamesid: '',
 
       redirect: false,
 
@@ -36,10 +36,10 @@ class GameID extends React.Component {
         if(snap.val() !== null){
           if(snap.val().status === true){
             self.setState({
-              quizid: snap.val().quizid,
-              geschiedenisid: snap.val().id,
+              gamesid: snap.val().id,
               redirect: true
             });
+            console.log(snap.val());
           } else {
             self.setState({
               errorStatus: true,
@@ -71,8 +71,7 @@ class GameID extends React.Component {
         <Redirect push to={{
           pathname: "/play/" + this.state.gameid,
           state: {
-            quizid: this.state.quizid,
-            geschiedenisid: this.state.geschiedenisid
+            gamesid: this.state.gamesid
           }
         }}/>
       );

@@ -13,7 +13,7 @@ class Nickname extends React.Component {
 
       gameid: '',
       userid: '',
-      geschiedenisid: '',
+      gamesid: '',
 
       errorStatus: false,
       errorTitle: '',
@@ -27,8 +27,7 @@ class Nickname extends React.Component {
   componentWillMount(){
     this.setState({
       gameid: this.props.match.params.id,
-      quizid: this.props.location.state.quizid,
-      geschiedenisid: this.props.location.state.geschiedenisid
+      gamesid: this.props.location.state.gamesid
     });
   }
 
@@ -37,14 +36,13 @@ class Nickname extends React.Component {
   }
 
   handleSubmit(e) {
+    var self = this;
     if(this.state.nickname != ''){
-      var self = this;
       console.log(self.state.quizid);
       const newUser = {
-        id: self.state.geschiedenisid,
         nickname: self.state.nickname
       }
-      const pushid = firebase.database().ref().child('quizzen').child(self.state.quizid).child('users').push(newUser);
+      const pushid = firebase.database().ref().child('games').child(self.state.gamesid).child('users').push(newUser);
       const userid = pushid.key;
       self.setState({
         userid: userid,
@@ -66,12 +64,13 @@ class Nickname extends React.Component {
         <Redirect push to={{
           pathname: "/play/" + this.state.gameid + "/join",
           state: {
-            userid: this.state.userid
+            userid: this.state.userid,
+            gamesid: this.state.gamesid
           }
         }}/>
       );
     }
-    
+
     return (
       <div className="outer play_body">
         <div className="inner">

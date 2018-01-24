@@ -40,9 +40,9 @@ class Master extends React.Component {
       <div>
         <Router>
           <div>
-            <Route path="/play" component={GameID} />
-            <Route path="/play/:id" component={Nickname} />
-            <Route path="/play/:id/join" component={Game} />
+            <Route exact path="/play" component={GameID} />
+            <Route exact path="/play/:id" component={Nickname} />
+            <Route exact path="/play/:id/join" component={Game} />
           </div>
         </Router>
       </div>

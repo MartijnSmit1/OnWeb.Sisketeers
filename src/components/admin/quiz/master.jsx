@@ -4,6 +4,7 @@ import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-r
 import firebase from 'firebase';
 import { Tab } from 'semantic-ui-react';
 import Error from '../error';
+import Succes from '../succes';
 
 class Quiz extends React.Component {
 
@@ -17,7 +18,11 @@ class Quiz extends React.Component {
 
       errorStatusInformatie: false,
       errorTitleInformatie: '',
-      errorSubTitleInformatie: ''
+      errorSubTitleInformatie: '',
+
+      succesStatus: true,
+      succesTitle: '',
+      succesSubTitle: ''
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -34,14 +39,18 @@ class Quiz extends React.Component {
   }
 
   handleSubmit(e){
-    if(this.state.titel != ''){
-      
-    } else {
+    if(this.state.titel == ''){
       this.setState({
         errorStatusInformatie: true,
         errorTitleInformatie: 'Titel mag niet leeg zijn.',
         errorSubTitleInformatie: 'Controleer en probeer het opnieuw.'
       });
+    } else {
+      const Data = {
+        titel: this.state.titel,
+        beschrijving: this.state.beschrijving
+      }
+      firebase.database().ref().child('quizzen').child(this.state.id).update(Data);
     }
     e.preventDefault();
   }
@@ -71,6 +80,7 @@ class Quiz extends React.Component {
       { menuItem: 'Informatie', render: () => <Tab.Pane attached={false}>
         <form onSubmit={this.handleSubmit} className="ui form">
           <Error key='mainError' status={this.state.errorStatusInformatie} title={this.state.errorTitleInformatie} subtitle={this.state.errorSubTitleInformatie}/>
+          <Succes key='mainSucces' status={this.state.succesStatus} title={this.state.succesTitle} subtitle={this.state.succesSubTitle}/>
           <h4 className="ui dividing header">Algemene informatie</h4>
           <div className="field">
             <label>Titel: </label>
