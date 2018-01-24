@@ -36,7 +36,10 @@ class App extends React.Component {
                   <Route path="/play" component={Main} />
                   <Route path="/admin" component={Admin} />
                   <Route exact={true} path="/" render={() => {
-                      return(<Redirect to='/play' />);
+                      return(<Redirect to="/play" />);
+                  }} />
+                  <Route path="*" render={() => {
+                      return(<Redirect to="/play" />);
                   }} />
                 </Switch>
               </Router>
