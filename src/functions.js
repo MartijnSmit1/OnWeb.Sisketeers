@@ -22,8 +22,7 @@ function test() {
 }
 
 function updateQuizQuestions(id, questions) {
-	var tref = firebase.database().ref('/testref/');
-	var trefq = firebase.database().ref('/testref/'+id+'/vragen/');
+	var trefq = firebase.database().ref('/quizzen/'+id+'/vragen/');
 
 	trefq.on('value', snapshot => {
 		console.log('UPDATING QUESTIONS....');
@@ -54,7 +53,7 @@ function updateQuizQuestions(id, questions) {
 }
 
 function createQuiz(titel, beschrijving, cb) {
-	var tref = firebase.database().ref('/testref/');
+	var tref = firebase.database().ref('/quizzen/');
 
 	tref.on('value', snapshot => {
 		tref.off('value');
