@@ -1,6 +1,6 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
-import { Button, Dropdown, Menu, Modal, Input } from 'semantic-ui-react';
+import { Button, Dropdown, Menu, Modal, Input, Loader, Dimmer } from 'semantic-ui-react';
 import firebase, { auth } from 'firebase';
 import * as f from '../../../functions';
 
@@ -13,7 +13,8 @@ class Navbar extends React.Component {
       auth: true,
       quizModalOpen: false,
       descriptionValQuiz: '',
-      titleValQuiz: ''
+      titleValQuiz: '',
+      creatingQuizLoader: false
     }
 
     this.logout = this.logout.bind(this);
@@ -58,14 +59,20 @@ class Navbar extends React.Component {
   closeQuizModal = () => this.setState({ quizModalOpen: false });
 
   handleCreateQuiz = () => {
+      this.setState({creatingQuizLoader: true});
       f.createQuiz(this.state.titleValQuiz, this.state.descriptionValQuiz, (id) => {
           // return(<Redirect to={'/admin/quizzen/'+id} />);
+          this.setState({createdNewQuiz: true, createdNewQuizId: id, creatingQuizLoader: false});
       });
   }
 
   render() {
     if(this.state.auth == false){
       return <Redirect to='/admin' />;
+    }
+
+    if(this.state.createdNewQuiz == true) {
+        return <Redirect to={'/admin/quizzen/'+this.state.createdNewQuizId} />
     }
 
     const { activeItem } = this.state
@@ -101,6 +108,9 @@ class Navbar extends React.Component {
           open={this.state.quizModalOpen}
           onClose={this.closeQuizModal}
         >
+            <Dimmer active={this.state.creatingQuizLoader} inverted>
+                <Loader inverted>Loading</Loader>
+            </Dimmer>
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
             <Modal.Description>
