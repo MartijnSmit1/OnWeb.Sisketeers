@@ -69,11 +69,11 @@ class Navbar extends React.Component {
           </Menu.Item>
           <NavLink to='/admin/dashboard' className="item" activeClassName="active">Dashboard</NavLink>
           <NavLink to='/admin/quizzen' className="item" activeClassName="active">Quizzen</NavLink>
-          <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink>
+          {/* <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink> */}
 
           <Menu.Menu position='right'>
             <Menu.Item>
-              <Button primary>Game starten</Button>
+              <Button primary>Quiz starten</Button>
             </Menu.Item>
             <Menu.Item>
               <Button positive onClick={this.openQuizModal}>Quiz aanmaken</Button>
@@ -86,6 +86,8 @@ class Navbar extends React.Component {
           </Menu.Menu>
         </Menu>
 
+        <br />
+
         <Modal
           size='small'
           closeIcon
@@ -94,8 +96,16 @@ class Navbar extends React.Component {
         >
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
-            <Modal.Description>
-            </Modal.Description>
+            <form className="ui form">
+              <div className="field">
+                <label>Titel: </label>
+                <input type="text" value={this.state.titel} onChange={this.handleTitelChange}/>
+              </div>
+              <div className="field">
+                <label>Beschrijving: </label>
+                <input type="text" value={this.state.beschrijving} onChange={this.handleBeschrijvingChange}/>
+              </div>
+            </form>
           </Modal.Content>
           <Modal.Actions>
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.closeQuizModal}/>

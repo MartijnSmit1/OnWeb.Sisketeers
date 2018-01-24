@@ -1,14 +1,26 @@
 import React, {Component} from 'react';
 import { BrowserRouter as Router, Route, Link, Redirect } from 'react-router-dom';
 import Navbar from './main/navbar';
+import firebase from 'firebase';
 
 class Dashboard extends React.Component {
 
   constructor(props){
     super(props);
+
+    this.state = {
+      quizcount: 0
+    }
   }
 
   componentDidMount(){
+    var self = this;
+    const rootRef = firebase.database().ref().child('quizzen');
+    rootRef.on('value', snap => {
+      this.setState({
+        quizcount: snap.numChildren()
+      });
+    });
   }
 
   render() {
@@ -22,7 +34,7 @@ class Dashboard extends React.Component {
               <div className="ui segment">
                 <div className="statistic">
                   <div className="value">
-                    -
+                    {this.state.quizcount}
                   </div>
                   <div className="label">
                     Quizzen
