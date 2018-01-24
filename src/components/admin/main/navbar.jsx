@@ -67,6 +67,12 @@ class Navbar extends React.Component {
         <NavLink to='/admin/games' className="item" activeClassName="active">Games</NavLink>
 
         <Menu.Menu position='right'>
+          <Menu.Item>
+            <Button primary>Game starten</Button>
+          </Menu.Item>
+          <Menu.Item>
+            <Button positive>Quiz aanmaken</Button>
+          </Menu.Item>
           <Dropdown item text={this.state.naam}>
             <Dropdown.Menu>
               <a className="item" onClick={this.logout}>Logout</a>
