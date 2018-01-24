@@ -1,5 +1,5 @@
 import React from 'react';
-import { BrowserRouter as Router, Route, Switch } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Switch, Redirect } from 'react-router-dom';
 import Main from './components/main/master';
 import Admin from './components/admin/master';
 import * as f from './functions';
@@ -35,6 +35,9 @@ class App extends React.Component {
                 <Switch>
                   <Route path="/play" component={Main} />
                   <Route path="/admin" component={Admin} />
+                  <Route exact={true} path="/" render={() => {
+                      return(<Redirect to='/play' />);
+                  }} />
                 </Switch>
               </Router>
             </div>
