@@ -105,8 +105,8 @@ class Navbar extends React.Component {
         >
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
-<<<<<<< HEAD
-            <form className="ui form">
+
+            {/* <form className="ui form">
               <div className="field">
                 <label>Titel: </label>
                 <input type="text" value={this.state.titel} onChange={this.handleTitelChange}/>
@@ -115,8 +115,8 @@ class Navbar extends React.Component {
                 <label>Beschrijving: </label>
                 <input type="text" value={this.state.beschrijving} onChange={this.handleBeschrijvingChange}/>
               </div>
-            </form>
-=======
+            </form> */}
+
             <Modal.Description>
                 <p>Title: <p><Input
                     onChange={e => {this.setState({titleValQuiz: e.target.value})}}
@@ -127,7 +127,6 @@ class Navbar extends React.Component {
                     placeholder='Description'
                 /></p></p>
             </Modal.Description>
->>>>>>> eadd8a57a621fd30536a781c0dcfec772a81866a
           </Modal.Content>
           <Modal.Actions>
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.closeQuizModal}/>
