@@ -109,8 +109,8 @@ class Quiz extends React.Component {
                 <Table.Row>
                   <Table.HeaderCell>Vraag</Table.HeaderCell>
                   <Table.HeaderCell>Type</Table.HeaderCell>
-                  <Table.HeaderCell>Score</Table.HeaderCell>
-                  <Table.HeaderCell>Tijd</Table.HeaderCell>
+                  <Table.HeaderCell>Score (Pt.)</Table.HeaderCell>
+                  <Table.HeaderCell>Tijd (Sec.)</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -224,25 +224,26 @@ class Quiz extends React.Component {
                             );
                         } else if (this.state.valType == 'janee' && i < 2) {
                             rendr = true;
-                            janee = true;
                         }
 
                         if (rendr) {
-                            if (janee) {
-                                console.log(item);
-                                item.text = ((i !== 1) ? 'Ja' : 'Nee');
-                                console.log('JA / NEE IS ACTIEF');
-                                console.log(item);
-                            }
                             return(
                                 <div key={i}>
                                 <span><br />
                                     <Input
                                     defaultValue={item.text}
                                     placeholder='Antwoord'
-                                    /><Input
-                                    defaultValue={item.goed}
-                                    placeholder='Goed/Fout'
+                                    />
+                                    <span> </span><Dropdown
+                                        placeholder='Goed'
+                                        compact
+                                        selection
+                                        defaultValue={item.goed}
+                                        options={[
+                                                    {key: true, text: 'Ja', value: true},
+                                                    {key: false, text: 'Nee', value: false}
+                                                ]}
+                                        onChange={(e, { value }) => {this.setState({valType: value})}}
                                     />
                                 </span><br />
                                 </div>
