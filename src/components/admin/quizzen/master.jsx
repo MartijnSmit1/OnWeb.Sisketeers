@@ -34,6 +34,7 @@ class Quizzen extends React.Component {
            <Quiztable
                key={i}
                quiz={currentQuiz}
+               aantal={currentQuiz.vragen.length}
            />
        );
    }

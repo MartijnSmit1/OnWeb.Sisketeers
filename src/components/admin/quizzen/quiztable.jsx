@@ -39,10 +39,10 @@ class Quiztable extends React.Component {
                   <th>Quiz ID: </th>
                   <td>{this.props.quiz.id}</td>
                 </tr>
-                {/* <tr>
+                <tr>
                   <th>Aantal vragen: </th>
-                  {this.vragenCount}
-                </tr> */}
+                  <td>{this.props.aantal}</td>
+                </tr>
               </tbody>
             </table>
           </NavLink>

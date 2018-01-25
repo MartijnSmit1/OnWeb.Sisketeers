@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navbar from '../main/navbar';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
 import firebase from 'firebase';
-import { Tab } from 'semantic-ui-react';
+import { Tab, Table, Label, Icon, Menu, Modal, Dimmer, Loader, Input, Button } from 'semantic-ui-react';
 import Error from '../error';
 import Succes from '../succes';
 
@@ -15,6 +15,7 @@ class Quiz extends React.Component {
       quiz: [],
       titel: '',
       beschrijving: '',
+      vragen: [],
 
       errorStatusInformatie: false,
       errorTitleInformatie: '',
@@ -22,7 +23,9 @@ class Quiz extends React.Component {
 
       succesStatus: true,
       succesTitle: '',
-      succesSubTitle: ''
+      succesSubTitle: '',
+
+      vragenModalOpen: false
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -66,16 +69,52 @@ class Quiz extends React.Component {
       self.setState({
         quiz: snap.val(),
         titel: snap.val().titel,
-        beschrijving: snap.val().beschrijving
+        beschrijving: snap.val().beschrijving,
+        vragen: snap.val().vragen
       });
     });
   }
 
-  render() {
+  vragenModalClose = () => {
+      this.setState({vragenModalOpen: false});
+  }
 
+  handleTableClick = (item) => {
+      console.log("TABLE CLICKED!");
+      this.setState({vragenModalOpen: true});
+  }
+
+  renderVragen = (item, i) => {
+      return(
+        <Table.Row key={i} onClick={() => {this.handleTableClick(item)}}>
+          <Table.Cell>{item.vraag}</Table.Cell>
+          <Table.Cell>{item.type}</Table.Cell>
+          <Table.Cell>{item.score}</Table.Cell>
+          <Table.Cell>{item.time}</Table.Cell>
+        </Table.Row>
+      );
+  }
+
+  render() {
+      if(this.state.vragen == undefined) {
+          this.state.vragen = [];
+      }
     const panes = [
       { menuItem: 'Vragen', render: () => <Tab.Pane attached={false}>
+          <Table celled>
+              <Table.Header>
+                <Table.Row>
+                  <Table.HeaderCell>Vraag</Table.HeaderCell>
+                  <Table.HeaderCell>Type</Table.HeaderCell>
+                  <Table.HeaderCell>Score</Table.HeaderCell>
+                  <Table.HeaderCell>Tijd</Table.HeaderCell>
+                </Table.Row>
+              </Table.Header>
 
+              <Table.Body>
+                {this.state.vragen.map(this.renderVragen)}
+              </Table.Body>
+          </Table>
       </Tab.Pane> },
       { menuItem: 'Informatie', render: () => <Tab.Pane attached={false}>
         <form onSubmit={this.handleSubmit} className="ui form">
@@ -120,6 +159,31 @@ class Quiz extends React.Component {
           <Tab menu={{ pointing: true }} panes={panes} />
 
         </div>
+        <Modal
+          size='small'
+          closeIcon
+          open={this.state.vragenModalOpen}
+          onClose={this.vragenModalClose}
+        >
+            <Dimmer active={false} inverted>
+                <Loader inverted>Loading</Loader>
+            </Dimmer>
+          <Modal.Header>Quiz aanmaken</Modal.Header>
+          <Modal.Content>
+            <Modal.Description>
+                <p>Title: <p><Input
+                    placeholder='Title'
+                /></p></p>
+                <p>Description: <p><Input
+                    placeholder='Description'
+                /></p></p>
+            </Modal.Description>
+          </Modal.Content>
+          <Modal.Actions>
+            <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.vragenModalClose}/>
+            <Button positive icon='checkmark' labelPosition='right' content='Aanmaken' onClick={() => {this.setState({vragenModalOpen: true})}} />
+          </Modal.Actions>
+        </Modal>
       </div>
     );
   }
