@@ -28,7 +28,9 @@ class Quiz extends React.Component {
       vragenModalOpen: false,
       valType: '',
       valVraag: '',
-      vraagAntwoorden: []
+      vraagAntwoorden: [],
+      valValue: [],
+      valGoedFout: []
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -82,14 +84,14 @@ class Quiz extends React.Component {
       this.setState({vragenModalOpen: false});
   }
 
-  handleTableClick = (item) => {
-      this.setState({valType: item.type, valVraag: item.vraag, valTijd: item.time, valScore: item.score, vraagAntwoorden: item.keuzes});
+  handleTableClick = (item, i) => {
+      this.setState({currentSelectedItem: i, valType: item.type, valVraag: item.vraag, valTijd: item.time, valScore: item.score, vraagAntwoorden: item.keuzes});
       this.setState({vragenModalOpen: true});
   }
 
   renderVragen = (item, i) => {
       return(
-        <Table.Row key={i} onClick={() => {this.handleTableClick(item)}}>
+        <Table.Row key={i} onClick={() => {this.handleTableClick(item, i)}}>
           <Table.Cell>{item.vraag}</Table.Cell>
           <Table.Cell>{item.type}</Table.Cell>
           <Table.Cell>{item.score}</Table.Cell>
@@ -177,6 +179,9 @@ class Quiz extends React.Component {
                 <Input
                     defaultValue={this.state.valVraag}
                     placeholder='Vraag'
+                    onChange={(e, { value }) => {
+                        this.setState({valVraag: value});
+                    }}
                 />
                 </span><br />
                 <span>Type: <br />
@@ -190,7 +195,9 @@ class Quiz extends React.Component {
                                     {key: 'janee', text: 'Ja/Nee', value: 'janee'},
                                     {key: 'open', text: 'Open', value: 'open'}
                                 ]}
-                        onChange={(e, { value }) => {this.setState({valType: value})}}
+                                onChange={(e, { value }) => {
+                                    this.setState({valType: value});
+                                }}
                     /><br />
                 </span>
                 <span>Tijd: <br /><Input
@@ -200,6 +207,9 @@ class Quiz extends React.Component {
                     label={{ basic: true, content: 'Sec.' }}
                     defaultValue={this.state.valTijd}
                     placeholder='Tijd'
+                    onChange={(e, { value }) => {
+                        this.setState({valTijd: value});
+                    }}
                 /></span><br />
                 <span>Score: <br />
                 <Input
@@ -208,12 +218,19 @@ class Quiz extends React.Component {
                     label={{ basic: true, content: 'Pt.' }}
                     defaultValue={this.state.valScore}
                     placeholder='Score'
+                    onChange={(e, { value }) => {
+                        this.setState({valScore: value});
+                    }}
                 />
                 </span><br />
                 <Modal.Description>
                     {this.state.vraagAntwoorden.map((item, i) => {
                         var rendr = false;
                         var janee = false;
+
+                        this.state.valValue[i] = item.text;
+                        this.state.valGoedFout[i] = item.goed;
+
                         if (this.state.valType == 'meerkeuze' && i < 4) {
                             rendr = true;
                         } else if (this.state.valType == 'open' && i < 1) {
@@ -223,7 +240,59 @@ class Quiz extends React.Component {
                                 </div>
                             );
                         } else if (this.state.valType == 'janee' && i < 2) {
-                            rendr = true;
+                            rendr = false;
+
+                            var dV = true;
+
+                            if (item.text == 'Ja') {
+                                dV = 'Ja';
+                            } else if (item.text == 'Nee') {
+                                dV = 'Nee';
+                            } else {
+                                dV = 'Nee';
+                            }
+
+                            console.log("CHECK");
+                            console.log(item);
+
+
+                            this.state.valValue[i] = dV;
+                            this.state.valGoedFout[i] = item.goed;
+
+                            return(
+                                <div key={i}>
+                                    <Dropdown
+                                        placeholder='Ja/Nee'
+                                        compact
+                                        selection
+                                        defaultValue={dV}
+                                        options={[
+                                                    {key: 'Ja', text: 'Ja', value: 'Ja'},
+                                                    {key: 'Nee', text: 'Nee', value: 'Nee'}
+                                                ]}
+                                        onChange={(e, { value }) => {
+                                            this.state.valValue[i] = value;
+                                            this.setState({valValue: this.state.valValue});
+                                            // console.log('VALUE CHANGE', this.state.valValue, value);
+                                        }}
+                                    />
+                                    <span> </span>
+                                    <Dropdown
+                                        placeholder='Goed'
+                                        compact
+                                        selection
+                                        defaultValue={item.goed}
+                                        options={[
+                                                    {key: true, text: 'Goed', value: true},
+                                                    {key: false, text: 'Fout', value: false}
+                                                ]}
+                                        onChange={(e, { value }) => {
+                                            this.state.valGoedFout[i] = value;
+                                            this.setState({valGoedFout: this.state.valGoedFout});
+                                        }}
+                                    /><br /><br />
+                                </div>
+                            );
                         }
 
                         if (rendr) {
@@ -231,8 +300,9 @@ class Quiz extends React.Component {
                                 <div key={i}>
                                 <span><br />
                                     <Input
-                                    defaultValue={item.text}
-                                    placeholder='Antwoord'
+                                        defaultValue={item.text}
+                                        placeholder='Antwoord'
+                                        onChange={(e, { value }) => {this.setState({valValue: value})}}
                                     />
                                     <span> </span><Dropdown
                                         placeholder='Goed'
@@ -240,10 +310,10 @@ class Quiz extends React.Component {
                                         selection
                                         defaultValue={item.goed}
                                         options={[
-                                                    {key: true, text: 'Ja', value: true},
-                                                    {key: false, text: 'Nee', value: false}
+                                                    {key: true, text: 'Goed', value: true},
+                                                    {key: false, text: 'Fout', value: false}
                                                 ]}
-                                        onChange={(e, { value }) => {this.setState({valType: value})}}
+                                        onChange={(e, { value }) => {this.setState({valGoedFout: value})}}
                                     />
                                 </span><br />
                                 </div>
@@ -254,6 +324,7 @@ class Quiz extends React.Component {
           </Modal.Content>
 
           <Modal.Actions>
+          {/* DELETE BUTTON */}
             <Button animated='fade' negative floated='left' onClick={() => {}}>
               <Button.Content hidden><Icon name='remove' /></Button.Content>
               <Button.Content visible>
@@ -261,8 +332,37 @@ class Quiz extends React.Component {
               </Button.Content>
             </Button>
 
+            {/* ANNULEREN BUTTON */}
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.vragenModalClose}/>
-            <Button positive icon='checkmark' labelPosition='right' content='Update' onClick={() => {}} />
+            {/* UPDATE BUTTON */}
+            <Button positive icon='checkmark' labelPosition='right' content='Update' onClick={() => {
+                var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+this.state.currentSelectedItem+'/');
+                console.log(this.state.id);
+
+                var dataPack = {
+                    "keuzes" : [ {
+                        "goed" : this.state.valGoedFout[0],
+                        "text" : this.state.valValue[0]
+                      }, {
+                          "goed" : this.state.valGoedFout[1],
+                          "text" : this.state.valValue[1]
+                      }, {
+                          "goed" : this.state.valGoedFout[2],
+                          "text" : this.state.valValue[2]
+                      }, {
+                          "goed" : this.state.valGoedFout[3],
+                          "text" : this.state.valValue[3]
+                      } ],
+                      "score" : this.state.valScore,
+                      "time" : this.state.valTijd,
+                      "type" : this.state.valType,
+                      "vraag" : this.state.valVraag
+                }
+
+
+                ref.update(dataPack);
+
+            }} />
           </Modal.Actions>
         </Modal>
       </div>
