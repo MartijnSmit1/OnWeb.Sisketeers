@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navbar from '../main/navbar';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
 import firebase from 'firebase';
-import { Tab, Table, Label, Icon, Menu, Modal, Dimmer, Loader, Input, Button } from 'semantic-ui-react';
+import { Tab, Table, Label, Icon, Menu, Modal, Dimmer, Loader, Input, Button, Dropdown } from 'semantic-ui-react';
 import Error from '../error';
 import Succes from '../succes';
 
@@ -25,7 +25,10 @@ class Quiz extends React.Component {
       succesTitle: '',
       succesSubTitle: '',
 
-      vragenModalOpen: false
+      vragenModalOpen: false,
+      valType: '',
+      valVraag: '',
+      vraagAntwoorden: []
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -70,7 +73,7 @@ class Quiz extends React.Component {
         quiz: snap.val(),
         titel: snap.val().titel,
         beschrijving: snap.val().beschrijving,
-        vragen: snap.val().vragen
+        vragen: snap.val().vragen,
       });
     });
   }
@@ -80,7 +83,7 @@ class Quiz extends React.Component {
   }
 
   handleTableClick = (item) => {
-      console.log("TABLE CLICKED!");
+      this.setState({valType: item.type, valVraag: item.vraag, valTijd: item.time, valScore: item.score, vraagAntwoorden: item.keuzes});
       this.setState({vragenModalOpen: true});
   }
 
@@ -160,7 +163,7 @@ class Quiz extends React.Component {
 
         </div>
         <Modal
-          size='small'
+          size='large'
           closeIcon
           open={this.state.vragenModalOpen}
           onClose={this.vragenModalClose}
@@ -168,20 +171,97 @@ class Quiz extends React.Component {
             <Dimmer active={false} inverted>
                 <Loader inverted>Loading</Loader>
             </Dimmer>
-          <Modal.Header>Quiz aanmaken</Modal.Header>
-          <Modal.Content>
-            <Modal.Description>
-                <p>Title: <p><Input
-                    placeholder='Title'
-                /></p></p>
-                <p>Description: <p><Input
-                    placeholder='Description'
-                /></p></p>
-            </Modal.Description>
+          <Modal.Header>Vraag aanpassen</Modal.Header>
+          <Modal.Content scrolling>
+                <span>Vraag: <br />
+                <Input
+                    defaultValue={this.state.valVraag}
+                    placeholder='Vraag'
+                />
+                </span><br />
+                <span>Type: <br />
+                    <Dropdown
+                        placeholder='Compact'
+                        compact
+                        selection
+                        defaultValue={this.state.valType}
+                        options={[
+                                    {key: 'meerkeuze', text: 'Meerkeuze', value: 'meerkeuze'},
+                                    {key: 'janee', text: 'Ja/Nee', value: 'janee'},
+                                    {key: 'open', text: 'Open', value: 'open'}
+                                ]}
+                        onChange={(e, { value }) => {this.setState({valType: value})}}
+                    /><br />
+                </span>
+                <span>Tijd: <br /><Input
+                    size='tiny'
+                    labelPosition='right'
+                    type='number'
+                    label={{ basic: true, content: 'Sec.' }}
+                    defaultValue={this.state.valTijd}
+                    placeholder='Tijd'
+                /></span><br />
+                <span>Score: <br />
+                <Input
+                    labelPosition='right'
+                    type='number'
+                    label={{ basic: true, content: 'Pt.' }}
+                    defaultValue={this.state.valScore}
+                    placeholder='Score'
+                />
+                </span><br />
+                <Modal.Description>
+                    {this.state.vraagAntwoorden.map((item, i) => {
+                        var rendr = false;
+                        var janee = false;
+                        if (this.state.valType == 'meerkeuze' && i < 4) {
+                            rendr = true;
+                        } else if (this.state.valType == 'open' && i < 1) {
+                            return(
+                                <div key={i}>
+                                    <span><br />Hier kan geen antwoord aan worden gekoppeld.</span>
+                                </div>
+                            );
+                        } else if (this.state.valType == 'janee' && i < 2) {
+                            rendr = true;
+                            janee = true;
+                        }
+
+                        if (rendr) {
+                            if (janee) {
+                                console.log(item);
+                                item.text = ((i !== 1) ? 'Ja' : 'Nee');
+                                console.log('JA / NEE IS ACTIEF');
+                                console.log(item);
+                            }
+                            return(
+                                <div key={i}>
+                                <span><br />
+                                    <Input
+                                    defaultValue={item.text}
+                                    placeholder='Antwoord'
+                                    /><Input
+                                    defaultValue={item.goed}
+                                    placeholder='Goed/Fout'
+                                    />
+                                </span><br />
+                                </div>
+                            );
+                        }
+                    })}
+                </Modal.Description>
           </Modal.Content>
+
           <Modal.Actions>
+            <Button animated='fade' negative floated='left' onClick={() => {}}>
+              <Button.Content hidden><Icon name='remove' /></Button.Content>
+              <Button.Content visible>
+                <Icon name='trash' />
+              </Button.Content>
+            </Button>
+
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.vragenModalClose}/>
-            <Button positive icon='checkmark' labelPosition='right' content='Aanmaken' onClick={() => {this.setState({vragenModalOpen: true})}} />
+            <Button positive icon='checkmark' labelPosition='right' content='Update' onClick={() => {}} />
           </Modal.Actions>
         </Modal>
       </div>
