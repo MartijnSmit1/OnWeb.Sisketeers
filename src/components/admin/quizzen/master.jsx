@@ -30,6 +30,7 @@ class Quizzen extends React.Component {
       if (currentQuiz.vragen == undefined) {
           currentQuiz.vragen = {length: 0};
       }
+      console.log(currentQuiz);
        return (
            <Quiztable
                key={i}

@@ -2,7 +2,7 @@ import React, {Component} from 'react';
 import Navbar from '../main/navbar';
 import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
 import firebase from 'firebase';
-import { Tab, Table, Label, Icon, Menu, Modal, Dimmer, Loader, Input, Button, Dropdown } from 'semantic-ui-react';
+import { Tab, Table, Label, Icon, Menu, Modal, Dimmer, Loader, Input, Button, Dropdown, Confirm } from 'semantic-ui-react';
 import Error from '../error';
 import Succes from '../succes';
 
@@ -28,9 +28,14 @@ class Quiz extends React.Component {
       vragenModalOpen: false,
       valType: '',
       valVraag: '',
-      vraagAntwoorden: [],
-      valValue: [],
-      valGoedFout: []
+      vraagAntwoorden: [{text: '', goed: true}, {text: '', goed: false}, {text: '', goed: false}, {text: '', goed: false}],
+      valValue: ['', '', '', ''],
+      valGoedFout: [true, false, false, false],
+      valTijd: 30,
+      valScore: 100,
+
+      confirmDeleteVraag: false,
+      delVraagRef: ''
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -78,9 +83,13 @@ class Quiz extends React.Component {
         vragen: snap.val().vragen,
       });
     });
+
+    this.vragenModalClose();
   }
 
   vragenModalClose = () => {
+      console.log("CLOSING VRAGENMODAL");
+      this.setState({valType: 'meerkeuze', valTijd: 30, valValue: ['', '', '', ''], valScore: 10, valGoedFout: [true, false, false, false], vraagAntwoorden: [{text: ''}, {text: ''}, {text: ''}, {text: ''}], vraag: ''});
       this.setState({vragenModalOpen: false});
   }
 
@@ -89,13 +98,23 @@ class Quiz extends React.Component {
       this.setState({vragenModalOpen: true});
   }
 
+  handleDeleteButtonClick = (item, i) => {
+      var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+i+'/');
+      this.setState({confirmDeleteVraag: true, delVraagRef: ref});
+  }
+
+  delRecord = (ref) => {
+      ref.remove();
+  }
+
   renderVragen = (item, i) => {
       return(
-        <Table.Row key={i} onClick={() => {this.handleTableClick(item, i)}}>
-          <Table.Cell>{item.vraag}</Table.Cell>
-          <Table.Cell>{item.type}</Table.Cell>
-          <Table.Cell>{item.score}</Table.Cell>
-          <Table.Cell>{item.time}</Table.Cell>
+        <Table.Row key={i}>
+            <Table.Cell><Button icon negative onClick={() => {this.handleDeleteButtonClick(item, i)}}><Icon name='trash' /></Button></Table.Cell>
+            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.vraag}</Table.Cell>
+            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.type}</Table.Cell>
+            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.score}</Table.Cell>
+            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.time}</Table.Cell>
         </Table.Row>
       );
   }
@@ -109,10 +128,11 @@ class Quiz extends React.Component {
           <Table celled>
               <Table.Header>
                 <Table.Row>
-                  <Table.HeaderCell>Vraag</Table.HeaderCell>
-                  <Table.HeaderCell>Type</Table.HeaderCell>
-                  <Table.HeaderCell>Score (Pt.)</Table.HeaderCell>
-                  <Table.HeaderCell>Tijd (Sec.)</Table.HeaderCell>
+                    <Table.HeaderCell><Button positive onClick={() => {this.setState({vragenModalOpen: true})}}>Nieuwe vraag</Button></Table.HeaderCell>
+                    <Table.HeaderCell>Vraag</Table.HeaderCell>
+                    <Table.HeaderCell>Type</Table.HeaderCell>
+                    <Table.HeaderCell>Score (Pt.)</Table.HeaderCell>
+                    <Table.HeaderCell>Tijd (Sec.)</Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -162,7 +182,15 @@ class Quiz extends React.Component {
           </div> */}
 
           <Tab menu={{ pointing: true }} panes={panes} />
-
+          <Confirm
+            content='Weet je zeker dat je deze vraag wilt verwijderen?'
+              open={this.state.confirmDeleteVraag}
+              size='small'
+              cancelButton='Nee'
+              confirmButton='Ja'
+              onCancel={() => {this.setState({confirmDeleteVraag: false})}}
+              onConfirm={() => {this.setState({confirmDeleteVraag: false});this.delRecord(this.state.delVraagRef)}}
+            />
         </div>
         <Modal
           size='large'
@@ -186,10 +214,10 @@ class Quiz extends React.Component {
                 </span><br />
                 <span>Type: <br />
                     <Dropdown
-                        placeholder='Compact'
+                        placeholder='Type vraag'
                         compact
                         selection
-                        defaultValue={this.state.valType}
+                        defaultValue={(this.state.valType == '') ? 'meerkeuze' : this.state.valType}
                         options={[
                                     {key: 'meerkeuze', text: 'Meerkeuze', value: 'meerkeuze'},
                                     {key: 'janee', text: 'Ja/Nee', value: 'janee'},
@@ -227,7 +255,8 @@ class Quiz extends React.Component {
                     {this.state.vraagAntwoorden.map((item, i) => {
                         var rendr = false;
                         var janee = false;
-
+                        console.log(item);
+                        console.log(this.state.valValue);
                         this.state.valValue[i] = item.text;
                         this.state.valGoedFout[i] = item.goed;
 
@@ -252,9 +281,6 @@ class Quiz extends React.Component {
                                 dV = 'Nee';
                             }
 
-                            console.log("CHECK");
-                            console.log(item);
-
 
                             this.state.valValue[i] = dV;
                             this.state.valGoedFout[i] = item.goed;
@@ -272,6 +298,7 @@ class Quiz extends React.Component {
                                                 ]}
                                         onChange={(e, { value }) => {
                                             this.state.valValue[i] = value;
+                                            this.state.vraagAntwoord[i].text = value;
                                             this.setState({valValue: this.state.valValue});
                                             // console.log('VALUE CHANGE', this.state.valValue, value);
                                         }}
@@ -281,7 +308,7 @@ class Quiz extends React.Component {
                                         placeholder='Goed'
                                         compact
                                         selection
-                                        defaultValue={item.goed}
+                                        defaultValue={this.state.valGoedFout[i]}
                                         options={[
                                                     {key: true, text: 'Goed', value: true},
                                                     {key: false, text: 'Fout', value: false}
@@ -300,15 +327,20 @@ class Quiz extends React.Component {
                                 <div key={i}>
                                 <span><br />
                                     <Input
-                                        defaultValue={item.text}
+                                        defaultValue={this.state.valValue[i]}
                                         placeholder='Antwoord'
-                                        onChange={(e, { value }) => {this.setState({valValue: value})}}
+                                        onChange={(e, { value }) => {
+                                            console.log(i);
+                                            this.state.valValue[i] = value;
+                                            this.state.vraagAntwoord[i].text = value;
+                                            this.setState({valValue: this.state.valValue});
+                                        }}
                                     />
                                     <span> </span><Dropdown
                                         placeholder='Goed'
                                         compact
                                         selection
-                                        defaultValue={item.goed}
+                                        defaultValue={(item.goed !== true && item.goed !== false) ? false : item.goed}
                                         options={[
                                                     {key: true, text: 'Goed', value: true},
                                                     {key: false, text: 'Fout', value: false}
@@ -336,31 +368,43 @@ class Quiz extends React.Component {
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.vragenModalClose}/>
             {/* UPDATE BUTTON */}
             <Button positive icon='checkmark' labelPosition='right' content='Update' onClick={() => {
-                var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+this.state.currentSelectedItem+'/');
-                console.log(this.state.id);
+                this.setState({vragenModalOpen: false});
+                var r = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/');
+                r.on('value', (snapshot) => {
+                    r.off('value');
+                    if (this.state.currentSelectedItem == undefined) {
+                        var length = snapshot.val().length;
+                        console.log('CURRENTSELECTEDITEM IS UNDEFINED.');
+                        this.state.currentSelectedItem = length;
+                        // this.setState({currentSelectedItem: length});
+                    }
+                    console.log(this.state.currentSelectedItem);
+                    var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+this.state.currentSelectedItem+'/');
 
-                var dataPack = {
-                    "keuzes" : [ {
-                        "goed" : this.state.valGoedFout[0],
-                        "text" : this.state.valValue[0]
-                      }, {
-                          "goed" : this.state.valGoedFout[1],
-                          "text" : this.state.valValue[1]
-                      }, {
-                          "goed" : this.state.valGoedFout[2],
-                          "text" : this.state.valValue[2]
-                      }, {
-                          "goed" : this.state.valGoedFout[3],
-                          "text" : this.state.valValue[3]
-                      } ],
-                      "score" : this.state.valScore,
-                      "time" : this.state.valTijd,
-                      "type" : this.state.valType,
-                      "vraag" : this.state.valVraag
-                }
+                    console.log(ref);
 
+                    var dataPack = {
+                        "keuzes" : [ {
+                            "goed" : ((this.state.valGoedFout[0] == undefined) ? true : this.state.valGoedFout[0]),
+                            "text" : this.state.valValue[0]
+                          }, {
+                              "goed" : ((this.state.valGoedFout[1] == undefined) ? false : this.state.valGoedFout[0]),
+                              "text" : this.state.valValue[1]
+                          }, {
+                              "goed" : ((this.state.valGoedFout[2] == undefined) ? false : this.state.valGoedFout[0]),
+                              "text" : this.state.valValue[2]
+                          }, {
+                              "goed" : ((this.state.valGoedFout[3] == undefined) ? false : this.state.valGoedFout[0]),
+                              "text" : this.state.valValue[3]
+                          } ],
+                          "score" : this.state.valScore,
+                          "time" : this.state.valTijd,
+                          "type" : this.state.valType,
+                          "vraag" : this.state.valVraag
+                    }
 
-                ref.update(dataPack);
+                    ref.update(dataPack);
+                });
 
             }} />
           </Modal.Actions>
