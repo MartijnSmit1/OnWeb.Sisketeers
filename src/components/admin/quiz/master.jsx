@@ -382,7 +382,12 @@ class Quiz extends React.Component {
                                                     {key: true, text: 'Goed', value: true},
                                                     {key: false, text: 'Fout', value: false}
                                                 ]}
-                                        onChange={(e, { value }) => {this.setState({valGoedFout: value})}}
+                                        // onChange={(e, { value }) => {this.setState({valGoedFout: value})}}
+                                        onChange={(e, { value }) => {
+                                            this.state.valGoedFout[i] = value;
+                                            // this.setState({valGoedFout: this.state.valGoedFout});
+                                            console.log(this.state.valGoedFout);
+                                        }}
                                     />
                                 </span><br />
                                 </div>
@@ -410,7 +415,14 @@ class Quiz extends React.Component {
                 r.on('value', (snapshot) => {
                     r.off('value');
                     if (this.state.currentSelectedItem == undefined) {
-                        var length = snapshot.val().length;
+                        var length = 0;
+
+                        if (snapshot.val() == null || snapshot.val() == undefined) {
+                            length = 0;
+                        } else {
+                            length = snapshot.val().length;
+                        }
+
                         console.log('CURRENTSELECTEDITEM IS UNDEFINED.');
                         this.state.currentSelectedItem = length;
                         // this.setState({currentSelectedItem: length});
@@ -421,17 +433,18 @@ class Quiz extends React.Component {
                     console.log(ref);
 
                     var dataPack = {
+                        // ((this.state.valGoedFout[0] == undefined) ? true : this.state.valGoedFout[0])
                         "keuzes" : [ {
-                            "goed" : ((this.state.valGoedFout[0] == undefined) ? true : this.state.valGoedFout[0]),
+                            "goed" : this.state.valGoedFout[0],
                             "text" : this.state.valValue[0]
                           }, {
-                              "goed" : ((this.state.valGoedFout[1] == undefined) ? false : this.state.valGoedFout[0]),
+                              "goed" : this.state.valGoedFout[1],
                               "text" : this.state.valValue[1]
                           }, {
-                              "goed" : ((this.state.valGoedFout[2] == undefined) ? false : this.state.valGoedFout[0]),
+                              "goed" : this.state.valGoedFout[2],
                               "text" : this.state.valValue[2]
                           }, {
-                              "goed" : ((this.state.valGoedFout[3] == undefined) ? false : this.state.valGoedFout[0]),
+                              "goed" : this.state.valGoedFout[3],
                               "text" : this.state.valValue[3]
                           } ],
                           "score" : this.state.valScore,
