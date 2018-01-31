@@ -35,7 +35,9 @@ class Quiz extends React.Component {
       valScore: 100,
 
       confirmDeleteVraag: false,
-      delVraagRef: ''
+      delVraagRef: '',
+
+      confirmDeleteQuiz: false
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -156,6 +158,19 @@ class Quiz extends React.Component {
           </div>
           <button className="ui submit positive button" type="submit">Opslaan</button>
         </form>
+      </Tab.Pane> },
+
+      { menuItem: 'Delete Quiz', render: () => <Tab.Pane attached={false}>
+            <Button />
+            <Confirm
+                content='Weet je zeker dat je deze vraag wilt verwijderen?'
+                open={this.state.confirmDeleteQuiz}
+                size='small'
+                cancelButton='Nee'
+                confirmButton='Ja'
+                onCancel={() => {this.setState({confirmDeleteQuiz: false})}}
+                onConfirm={() => {this.setState({confirmDeleteQuiz: false});this.delRecord(this.state.delVraagRef)}}
+            />
       </Tab.Pane> }
     ]
 
