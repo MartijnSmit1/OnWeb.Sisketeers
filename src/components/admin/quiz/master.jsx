@@ -37,7 +37,8 @@ class Quiz extends React.Component {
       confirmDeleteVraag: false,
       delVraagRef: '',
 
-      confirmDeleteQuiz: false
+      confirmDeleteQuiz: false,
+      redirectToQuizzen: false
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -77,12 +78,28 @@ class Quiz extends React.Component {
     var self = this;
     const rootRef = firebase.database().ref().child('quizzen');
     const ref = rootRef.child(this.props.match.params.id);
+
     ref.on('value', snap => {
+        var snapshotVal = snap.val();
+
+        if (snapshotVal == undefined) {
+            snapshotVal = {};
+        }
+        if (snapshotVal.titel == undefined) {
+            snapshotVal.titel = '';
+        }
+        if (snapshotVal.beschrijving == undefined) {
+            snapshotVal.beschrijving = '';
+        }
+        if (snapshotVal.vragen == undefined) {
+            snapshotVal.vragen = [];
+        }
+
       self.setState({
-        quiz: snap.val(),
-        titel: snap.val().titel,
-        beschrijving: snap.val().beschrijving,
-        vragen: snap.val().vragen,
+        quiz: snapshotVal,
+        titel: snapshotVal.titel,
+        beschrijving: snapshotVal.beschrijving,
+        vragen: snapshotVal.vragen,
       });
     });
 
@@ -121,9 +138,16 @@ class Quiz extends React.Component {
       );
   }
 
+  handleDeleteQuiz = () => {
+      this.setState({confirmDeleteQuiz: true});
+  }
+
   render() {
       if(this.state.vragen == undefined) {
           this.state.vragen = [];
+      }
+      if(this.state.redirectToQuizzen == true) {
+          return(<Redirect to="/admin/quizzen" />);
       }
     const panes = [
       { menuItem: 'Vragen', render: () => <Tab.Pane attached={false}>
@@ -143,7 +167,7 @@ class Quiz extends React.Component {
               </Table.Body>
           </Table>
       </Tab.Pane> },
-      { menuItem: 'Informatie', render: () => <Tab.Pane attached={false}>
+      { menuItem: 'Algemeen', render: () => <Tab.Pane attached={false}>
         <form onSubmit={this.handleSubmit} className="ui form">
           <Error key='mainError' status={this.state.errorStatusInformatie} title={this.state.errorTitleInformatie} subtitle={this.state.errorSubTitleInformatie}/>
           <Succes key='mainSucces' status={this.state.succesStatus} title={this.state.succesTitle} subtitle={this.state.succesSubTitle}/>
@@ -158,20 +182,9 @@ class Quiz extends React.Component {
           </div>
           <button className="ui submit positive button" type="submit">Opslaan</button>
         </form>
+        <br/>
+        <Button inverted color='red' onClick={this.handleDeleteQuiz}>Delete Quiz</Button>
       </Tab.Pane> },
-
-      { menuItem: 'Delete Quiz', render: () => <Tab.Pane attached={false}>
-            <Button />
-            <Confirm
-                content='Weet je zeker dat je deze vraag wilt verwijderen?'
-                open={this.state.confirmDeleteQuiz}
-                size='small'
-                cancelButton='Nee'
-                confirmButton='Ja'
-                onCancel={() => {this.setState({confirmDeleteQuiz: false})}}
-                onConfirm={() => {this.setState({confirmDeleteQuiz: false});this.delRecord(this.state.delVraagRef)}}
-            />
-      </Tab.Pane> }
     ]
 
     return (
@@ -197,6 +210,15 @@ class Quiz extends React.Component {
           </div> */}
 
           <Tab menu={{ pointing: true }} panes={panes} />
+          <Confirm
+            content='Weet je zeker dat je deze quiz wilt verwijderen?'
+              open={this.state.confirmDeleteQuiz}
+              size='small'
+              cancelButton='Annuleren'
+              confirmButton='DELETE'
+              onCancel={() => {this.setState({confirmDeleteQuiz: false})}}
+              onConfirm={() => {this.setState({confirmDeleteQuiz: false});var r = firebase.database().ref('/quizzen/'+this.state.id);this.delRecord(r);this.setState({redirectToQuizzen: true});}}
+            />
           <Confirm
             content='Weet je zeker dat je deze vraag wilt verwijderen?'
               open={this.state.confirmDeleteVraag}
