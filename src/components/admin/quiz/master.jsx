@@ -255,8 +255,8 @@ class Quiz extends React.Component {
                     {this.state.vraagAntwoorden.map((item, i) => {
                         var rendr = false;
                         var janee = false;
-                        console.log(item);
-                        console.log(this.state.valValue);
+                        // console.log(item);
+                        // console.log(this.state.valValue);
                         this.state.valValue[i] = item.text;
                         this.state.valGoedFout[i] = item.goed;
 
@@ -298,7 +298,7 @@ class Quiz extends React.Component {
                                                 ]}
                                         onChange={(e, { value }) => {
                                             this.state.valValue[i] = value;
-                                            this.state.vraagAntwoord[i].text = value;
+                                            this.state.vraagAntwoorden[i].text = value;
                                             this.setState({valValue: this.state.valValue});
                                             // console.log('VALUE CHANGE', this.state.valValue, value);
                                         }}
@@ -330,9 +330,9 @@ class Quiz extends React.Component {
                                         defaultValue={this.state.valValue[i]}
                                         placeholder='Antwoord'
                                         onChange={(e, { value }) => {
-                                            console.log(i);
+                                            console.log(this.state);
                                             this.state.valValue[i] = value;
-                                            this.state.vraagAntwoord[i].text = value;
+                                            this.state.vraagAntwoorden[i].text = value;
                                             this.setState({valValue: this.state.valValue});
                                         }}
                                     />
