@@ -1,8 +1,8 @@
-import React from 'react';
+import React, {Component} from 'react';
 import Navbar from '../main/navbar';
-// import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Link, Redirect, NavLink } from 'react-router-dom';
 import firebase from 'firebase';
-// import Quiztable from './../quiztable';
+import Quiztable from './../quizzen/quiztable';
 
 class Games extends React.Component {
 
@@ -17,7 +17,6 @@ class Games extends React.Component {
   }
 
   componentDidMount(){
-    console.log("COMPONENT GAMES MOUNTED!");
     var self = this;
     const rootRef = firebase.database().ref().child('quizzen');
     rootRef.on('value', snap => {
@@ -32,14 +31,13 @@ class Games extends React.Component {
           currentQuiz.vragen = {length: 0};
       }
       console.log(currentQuiz);
-       // return (
-       //     <Quiztable
-       //         key={i}
-       //         quiz={currentQuiz}
-       //         aantal={currentQuiz.vragen.length}
-       //     />
-       // );
-       return(<div>Gewoon een test</div>);
+       return (
+           <Quiztable
+               key={i}
+               quiz={currentQuiz}
+               aantal={currentQuiz.vragen.length}
+           />
+       );
    }
 
   render() {
@@ -49,7 +47,7 @@ class Games extends React.Component {
         <Navbar />
         <div className="ui container">
           <div className="ui equal four column grid">
-            test
+            {this.state.quizzen.map(this.renderQuizzen)}
           </div>
         </div>
       </div>
