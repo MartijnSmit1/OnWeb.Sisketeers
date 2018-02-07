@@ -39,7 +39,7 @@ class App extends React.Component {
                       return(<Redirect to="/play" />);
                   }} />
                   <Route path="*" render={() => {
-                      return(<Redirect to="/play" />);
+                      return(<Redirect to="/admin" />);
                   }} />
                 </Switch>
               </Router>

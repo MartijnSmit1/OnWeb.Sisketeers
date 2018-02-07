@@ -38,7 +38,9 @@ class Quiz extends React.Component {
       delVraagRef: '',
 
       confirmDeleteQuiz: false,
-      redirectToQuizzen: false
+      redirectToQuizzen: false,
+
+      newQuestion: false
     }
 
     this.handleTitelChange = this.handleTitelChange.bind(this);
@@ -154,7 +156,7 @@ class Quiz extends React.Component {
           <Table celled>
               <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell><Button positive onClick={() => {this.setState({vragenModalOpen: true})}}>Nieuwe vraag</Button></Table.HeaderCell>
+                    <Table.HeaderCell><Button positive onClick={() => {this.setState({vragenModalOpen: true, newQuestion: true})}}>Nieuwe vraag</Button></Table.HeaderCell>
                     <Table.HeaderCell>Vraag</Table.HeaderCell>
                     <Table.HeaderCell>Type</Table.HeaderCell>
                     <Table.HeaderCell>Score (Pt.)</Table.HeaderCell>
@@ -292,7 +294,7 @@ class Quiz extends React.Component {
                     {this.state.vraagAntwoorden.map((item, i) => {
                         var rendr = false;
                         var janee = false;
-                        // console.log(item);
+                        console.log(item);
                         // console.log(this.state.valValue);
                         this.state.valValue[i] = item.text;
                         this.state.valGoedFout[i] = item.goed;
@@ -341,6 +343,7 @@ class Quiz extends React.Component {
                                         }}
                                     />
                                     <span> </span>
+                                    {console.log(this.state.valGoedFout)}
                                     <Dropdown
                                         placeholder='Goed'
                                         compact
@@ -399,7 +402,7 @@ class Quiz extends React.Component {
 
           <Modal.Actions>
           {/* DELETE BUTTON */}
-            <Button animated='fade' negative floated='left' onClick={() => {}}>
+            <Button animated='fade' negative floated='left' onClick={() => {this.state.newQuestion = false}}>
               <Button.Content hidden><Icon name='remove' /></Button.Content>
               <Button.Content visible>
                 <Icon name='trash' />
@@ -407,14 +410,15 @@ class Quiz extends React.Component {
             </Button>
 
             {/* ANNULEREN BUTTON */}
-            <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.vragenModalClose}/>
+            <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={() => {this.vragenModalClose(); this.state.newQuestion = false}}/>
             {/* UPDATE BUTTON */}
             <Button positive icon='checkmark' labelPosition='right' content='Update' onClick={() => {
                 this.setState({vragenModalOpen: false});
                 var r = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/');
                 r.on('value', (snapshot) => {
                     r.off('value');
-                    if (this.state.currentSelectedItem == undefined) {
+                    if (this.state.currentSelectedItem == undefined || this.state.newQuestion == true) {
+                      this.state.newQuestion = false;
                         var length = 0;
 
                         if (snapshot.val() == null || snapshot.val() == undefined) {
@@ -431,6 +435,20 @@ class Quiz extends React.Component {
                     var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+this.state.currentSelectedItem+'/');
 
                     console.log(ref);
+
+                    for (var i = 0; i < 4; i++) {
+                      if (this.state.valGoedFout[i] == undefined) {
+                        if (this.state.valGoedFout.indexOf(true) >= 0) {
+                          this.state.valGoedFout[i] = false;
+                        } else {
+                          this.state.valGoedFout[i] = true;
+                        }
+                      }
+
+                      if (this.state.valValue[i] == undefined) {
+                        this.state.valValue[i] = '';
+                      }
+                    }
 
                     var dataPack = {
                         // ((this.state.valGoedFout[0] == undefined) ? true : this.state.valGoedFout[0])
@@ -452,7 +470,7 @@ class Quiz extends React.Component {
                           "type" : this.state.valType,
                           "vraag" : this.state.valVraag
                     }
-
+                    // console.log(dataPack);
                     ref.update(dataPack);
                 });
 

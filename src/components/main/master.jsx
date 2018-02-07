@@ -15,7 +15,7 @@ class Master extends React.Component {
       show: 'block',
       close: 'none',
       gameid: ''
-    }
+    };
   }
 
   hideDeveloper_area(){

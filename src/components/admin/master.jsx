@@ -5,6 +5,7 @@ import Login from './login';
 import Dashboard from './dashboard';
 import Quizzen from './quizzen/master';
 import Quiz from './quiz/master';
+import Games from './games/master';
 
 class Master extends React.Component {
 
@@ -20,6 +21,7 @@ class Master extends React.Component {
             <Route exact path="/admin" component={Login} />
             <Route exact path="/admin/dashboard" component={Dashboard} />
             <Route exact path="/admin/quizzen" component={Quizzen} />
+            <Route exact path="/admin/games" conponent={Games} />
             <Route path="/admin/quizzen/:id" component={Quiz} />
           </div>
         </Router>
