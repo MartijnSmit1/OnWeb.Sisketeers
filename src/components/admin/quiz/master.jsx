@@ -109,7 +109,7 @@ class Quiz extends React.Component {
   }
 
   vragenModalClose = () => {
-      console.log("CLOSING VRAGENMODAL");
+      // console.log("CLOSING VRAGENMODAL");
       this.setState({valType: 'meerkeuze', valTijd: 30, valValue: ['', '', '', ''], valScore: 10, valGoedFout: [true, false, false, false], vraagAntwoorden: [{text: ''}, {text: ''}, {text: ''}, {text: ''}], vraag: ''});
       this.setState({vragenModalOpen: false});
   }
@@ -131,11 +131,14 @@ class Quiz extends React.Component {
   renderVragen = (item, i) => {
       return(
         <Table.Row key={i}>
-            <Table.Cell><Button icon negative onClick={() => {this.handleDeleteButtonClick(item, i)}}><Icon name='trash' /></Button></Table.Cell>
-            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.vraag}</Table.Cell>
-            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.type}</Table.Cell>
-            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.score}</Table.Cell>
-            <Table.Cell onClick={() => {this.handleTableClick(item, i)}}>{item.time}</Table.Cell>
+            <Table.Cell>{item.vraag}</Table.Cell>
+            <Table.Cell>{item.type}</Table.Cell>
+            <Table.Cell>{item.score}</Table.Cell>
+            <Table.Cell>{item.time}</Table.Cell>
+            <Table.Cell textAlign='right' className="cell-width">
+              <Button icon onClick={() => {this.handleTableClick(item, i)}}><Icon name='edit outline' /></Button>
+              <Button icon negative onClick={() => {this.handleDeleteButtonClick(item, i)}}><Icon name='trash' /></Button>
+            </Table.Cell>
         </Table.Row>
       );
   }
@@ -156,11 +159,11 @@ class Quiz extends React.Component {
           <Table celled>
               <Table.Header>
                 <Table.Row>
-                    <Table.HeaderCell><Button positive onClick={() => {this.setState({vragenModalOpen: true, newQuestion: true})}}>Nieuwe vraag</Button></Table.HeaderCell>
                     <Table.HeaderCell>Vraag</Table.HeaderCell>
                     <Table.HeaderCell>Type</Table.HeaderCell>
                     <Table.HeaderCell>Score (Pt.)</Table.HeaderCell>
                     <Table.HeaderCell>Tijd (Sec.)</Table.HeaderCell>
+                    <Table.HeaderCell className="cell-width" textAlign='center'><Button positive onClick={() => {this.setState({vragenModalOpen: true, newQuestion: true})}}>Nieuwe vraag</Button></Table.HeaderCell>
                 </Table.Row>
               </Table.Header>
 
@@ -192,25 +195,12 @@ class Quiz extends React.Component {
     return (
       <div>
         <Navbar />
+        <br />
         <div className="ui container">
           <h2 className="ui header">
             {this.state.quiz.titel}
             <div className="sub header">{this.state.quiz.beschrijving}</div>
           </h2>
-          {/* <div className="ui segment">
-            <div class="ui form">
-              <h4 class="ui dividing header">Quiz informatie</h4>
-              <div class="field">
-                <label>Titel: </label>
-                <input type="text" />
-              </div>
-              <div class="field">
-                <label>Beschrijving: </label>
-                <textarea rows="1"></textarea>
-              </div>
-            </div>
-          </div> */}
-
           <Tab menu={{ pointing: true }} panes={panes} />
           <Confirm
             content='Weet je zeker dat je deze quiz wilt verwijderen?'
@@ -294,7 +284,7 @@ class Quiz extends React.Component {
                     {this.state.vraagAntwoorden.map((item, i) => {
                         var rendr = false;
                         var janee = false;
-                        console.log(item);
+                        // console.log(item);
                         // console.log(this.state.valValue);
                         this.state.valValue[i] = item.text;
                         this.state.valGoedFout[i] = item.goed;
@@ -343,7 +333,7 @@ class Quiz extends React.Component {
                                         }}
                                     />
                                     <span> </span>
-                                    {console.log(this.state.valGoedFout)}
+                                    // {console.log(this.state.valGoedFout)}
                                     <Dropdown
                                         placeholder='Goed'
                                         compact
@@ -370,7 +360,7 @@ class Quiz extends React.Component {
                                         defaultValue={this.state.valValue[i]}
                                         placeholder='Antwoord'
                                         onChange={(e, { value }) => {
-                                            console.log(this.state);
+                                            // console.log(this.state);
                                             this.state.valValue[i] = value;
                                             this.state.vraagAntwoorden[i].text = value;
                                             this.setState({valValue: this.state.valValue});
@@ -389,7 +379,7 @@ class Quiz extends React.Component {
                                         onChange={(e, { value }) => {
                                             this.state.valGoedFout[i] = value;
                                             // this.setState({valGoedFout: this.state.valGoedFout});
-                                            console.log(this.state.valGoedFout);
+                                            // console.log(this.state.valGoedFout);
                                         }}
                                     />
                                 </span><br />
@@ -427,14 +417,14 @@ class Quiz extends React.Component {
                             length = snapshot.val().length;
                         }
 
-                        console.log('CURRENTSELECTEDITEM IS UNDEFINED.');
+                        // console.log('CURRENTSELECTEDITEM IS UNDEFINED.');
                         this.state.currentSelectedItem = length;
                         // this.setState({currentSelectedItem: length});
                     }
-                    console.log(this.state.currentSelectedItem);
+                    // console.log(this.state.currentSelectedItem);
                     var ref = firebase.database().ref('/quizzen/'+this.state.id+'/vragen/'+this.state.currentSelectedItem+'/');
 
-                    console.log(ref);
+                    // console.log(ref);
 
                     for (var i = 0; i < 4; i++) {
                       if (this.state.valGoedFout[i] == undefined) {

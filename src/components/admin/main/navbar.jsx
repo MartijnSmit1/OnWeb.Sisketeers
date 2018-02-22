@@ -113,16 +113,26 @@ class Navbar extends React.Component {
             </Dimmer>
           <Modal.Header>Quiz aanmaken</Modal.Header>
           <Modal.Content>
-            <Modal.Description>
-                <p>Title: <p><Input
-                    onChange={e => {this.setState({titleValQuiz: e.target.value})}}
-                    placeholder='Title'
-                /></p></p>
-                <p>Description: <p><Input
-                    onChange={e => {this.setState({descriptionValQuiz: e.target.value})}}
-                    placeholder='Description'
-                /></p></p>
-            </Modal.Description>
+            <form class="ui form">
+              <div class="field">
+                <label>Title</label>
+                <input
+                  name="title"
+                  type="text"
+                  onChange={e => {this.setState({titleValQuiz: e.target.value})}}
+                  placeholder='Title'
+                />
+              </div>
+              <div class="field">
+                <label>Description</label>
+                <input
+                  name="description"
+                  onChange={e => {this.setState({descriptionValQuiz: e.target.value})}}
+                  placeholder='Description'
+                  type="text"
+                />
+              </div>
+            </form>
           </Modal.Content>
           <Modal.Actions>
             <Button negative icon='remove' labelPosition='right' content='Annuleren' onClick={this.closeQuizModal}/>

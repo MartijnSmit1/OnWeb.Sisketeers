@@ -22,7 +22,7 @@ class Quiztable extends React.Component {
           <NavLink
             to={{ pathname: "/admin/quizzen/" + this.props.quiz.id }}
           >
-            <table>
+            <table className="table-width">
               <thead>
                 <tr>
                   <th colSpan="2"><h2>{this.props.quiz.titel}</h2></th>

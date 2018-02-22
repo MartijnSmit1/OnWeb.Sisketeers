@@ -56,3 +56,11 @@ form.large{
 a{
   color: black;
 }
+
+.table-width{
+  width: 100%;
+}
+
+.cell-width {
+  width: 160px;
+}

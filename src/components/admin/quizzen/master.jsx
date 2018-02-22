@@ -45,6 +45,7 @@ class Quizzen extends React.Component {
     return (
       <div>
         <Navbar />
+        <br />
         <div className="ui container">
           <div className="ui equal four column grid">
             {this.state.quizzen.map(this.renderQuizzen)}
